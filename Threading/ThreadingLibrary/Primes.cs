@@ -1,12 +1,12 @@
-﻿namespace ThreadingConsole
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
 
+namespace ThreadingLibrary
+{
     public class Primes
     {
         private List<ulong> _foundPrimes;
@@ -20,7 +20,9 @@
         public ulong BiggestFoundPrime { get; private set; }
         public DateTime Start { get; private set; }
         public TimeSpan TenMil { get; private set; }
+
         public TimeSpan HundredMil { get; private set; }
+
         public List<ulong> FoundPrimes { get { return this._foundPrimes; } private set { this._foundPrimes = value; } }
 
         public Primes()
@@ -57,7 +59,6 @@
                     {
                         break;
                     }
-
                     number = this.ActualNumber;
                     this.ActualNumber++;
                 }
@@ -93,10 +94,8 @@
         {
             if (number < 2)
                 return false;
-
             if (number == 2)
                 return true;
-
             if (number % 2 == 0)
                 return false;
 
