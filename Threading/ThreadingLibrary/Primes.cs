@@ -20,23 +20,29 @@ namespace ThreadingLibrary
         public ulong BiggestFoundPrime { get; private set; }
         public DateTime Start { get; private set; }
         public TimeSpan TenMil { get; private set; }
-
         public TimeSpan HundredMil { get; private set; }
-
         public List<ulong> FoundPrimes { get { return this._foundPrimes; } private set { this._foundPrimes = value; } }
+        public ulong Limit { get; set; }
+
+        public event TenMilHandler TenMilEvent;
+        public event HundredMilHandler HundredMilEvent;
+
+        public delegate void TenMilHandler(TimeSpan time, EventArgs e);
+        public delegate void HundredMilHandler(TimeSpan time, EventArgs e);
 
         public Primes()
         {
-            this._foundPrimes = new List<ulong>();
-            this.Stop = false;
-            this.ActualNumber = 2;
             this.ThreadCount = 1;
-            this.TenMil = new TimeSpan();
-            this.HundredMil = new TimeSpan();
+            this.Limit = 100000000;
         }
 
         public void RunParallel()
         {
+            this._foundPrimes = new List<ulong>();
+            this.Stop = false;
+            this.ActualNumber = 2;
+            this.TenMil = new TimeSpan();
+            this.HundredMil = new TimeSpan();
             this.Start = DateTime.Now;
 
             var threads = new Thread[this.ThreadCount];
@@ -59,18 +65,26 @@ namespace ThreadingLibrary
                     {
                         break;
                     }
+
                     number = this.ActualNumber;
                     this.ActualNumber++;
+                }
+
+                if (this.Limit != 0 && this.ActualNumber >= this.Limit)
+                {
+                    this.Stop = true;
                 }
 
                 if (this.ActualNumber == 10000000)
                 {
                     this.TenMil = DateTime.Now - this.Start;
+                    this.TenMilEvent(this.TenMil, null);
                 }
 
                 if (this.ActualNumber == 100000000)
                 {
                     this.HundredMil = DateTime.Now - this.Start;
+                    this.HundredMilEvent(this.HundredMil, null);
                 }
 
                 if (this.IsPrime(number))
