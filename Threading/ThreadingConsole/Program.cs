@@ -67,6 +67,11 @@
                 Console.SetCursorPosition(22, 8);
                 Console.Write(primes.HundredMil);
 
+                if (primes.HundredMil != default)
+                {
+                    primes.Stop = true;
+                }
+
                 Thread.Sleep(1000);
             }
         }
